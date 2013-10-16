@@ -16,7 +16,7 @@ beforeEach(function(){
 
 describe("Node Server Request Listener Function", function() {
 
-  xit("Should answer GET requests for /", function() {
+  it("Should answer GET requests for /", function() {
     var req = new stubs.Request("/", "GET");
     handler.handleRequest(req, res);
     async(function(){
@@ -26,7 +26,7 @@ describe("Node Server Request Listener Function", function() {
     });
   });
 
-  xit("Should answer GET requests for archived websites", function() {
+  it("Should answer GET requests for archived websites", function() {
     var fixtureName = "www.google.com";
     var req = new stubs.Request("/" + fixtureName, "GET");
     handler.handleRequest(req, res);
@@ -44,11 +44,14 @@ describe("Node Server Request Listener Function", function() {
     var req = new stubs.Request("/", "POST", {url: url});
 
     handler.handleRequest(req, res);
-
-    var fileContents = fs.readFileSync(handler.datadir, 'utf8');
-    expect(res._responseCode).toEqual(302);
-    expect(fileContents).toEqual(url + "\n");
-    expect(res._ended).toEqual(true);
+    
+    var fileContents;
+    setTimeout(function() {
+      fileContents = fs.readFileSync(handler.datadir, 'utf8');
+      expect(res._responseCode).toEqual(302);
+      expect(fileContents).toEqual(url + "\n");
+      expect(res._ended).toEqual(true);
+    }, 1000);
   });
 
   it("Should 404 when asked for a nonexistent file", function() {
