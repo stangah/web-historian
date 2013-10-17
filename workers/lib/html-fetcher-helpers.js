@@ -6,7 +6,8 @@ module.exports.datadir = path.join(__dirname, "../../data/sites/"); // tests wil
 
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : 'webhistorian'
+  user     : 'webhistorian',
+  database : 'WebHistorian'
 });
 
 exports.readUrls = function(filePath, cb){
@@ -27,11 +28,12 @@ exports.downloadUrls = function(urls){
     connection.connect();
     connection.query('SELECT site FROM Sites', function(err, rows, fields) {
       if (err)  console.log(err);
-      for (var i = 0; i < rows.length-1; i++) {
+      console.log('db rows: ', rows[0].site);
+      for (var i = 0; i < rows.length; i++) {
         request('http://' + rows[i].site).pipe(fs.createWriteStream(module.exports.datadir + rows[i].site));
       }
+      connection.end();
     });
-    connection.end();
     return true;
   }
 };
