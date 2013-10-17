@@ -1,7 +1,53 @@
 body {
+  background: aliceblue;
   margin: 0;
   padding: 0;
 }
+
+h1 {
+  margin-left: 6%;
+  color: rgba(10,60,150, 0.8);
+  font-size: 3em;
+  text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+
+h1 sub {
+  color: navy;
+  font-size: 0.3em;
+  font-style: italic;
+}
+
+li {
+  font-size: 1.6em;
+  height: 1.8em;
+  list-style-type: none;
+  margin: 1% 0;
+}
+
+li:hover{
+  background: plum;
+  border-radius: 10px;
+}
+
+ul {
+  margin: auto auto;
+  padding: 2% 0;
+  width: 30%;
+}
+
+a:link {
+  text-decoration:none;
+  color: black;
+}
+
+a:visited {
+  text-decoration:none;
+  color: black;
+}
+
+a:hover {text-decoration:none;}
+
+a:active {text-decoration:none;}
 
 .container {
   font-family: Helvetica;

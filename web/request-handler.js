@@ -29,6 +29,8 @@ module.exports.handleRequest = function (req, res) {
 
   if (pathName === "/") {
     lookup = './public/index.html';
+  } else if(pathName === "/siteList"){
+    lookup = '/siteList';
   } else if (pathName.slice(0,4) === "/css") {
     lookup = './public' + pathName;
   } else {  // this will not allow us to get files referenced by index.html
@@ -53,23 +55,30 @@ module.exports.handleRequest = function (req, res) {
   // handle different method types
   switch(req.method) {
     case 'GET':
-      fs.exists(path.resolve(__dirname, lookup), function(exists) {
-        if(exists) {
-          fs.readFile(path.resolve(__dirname, lookup), function(err, data) {
-            if (err) {
-              console.log(err);
-              res.writeHead(500);
-              res.end();
-            } else {
-              res.writeHead(200, {"Content-Type": contentType });
-              res.end(data);
-            }
-          });
-        } else {
-          res.writeHead(404, headers);
-          res.end();
-        }
-      });
+      if(lookup === '/siteList'){  // total hack but a quick fix at 9:00PM
+        htmlfetchers.readUrls(module.exports.datadir, function(data){
+          res.writeHead(200, headers);
+          res.end(JSON.stringify(data));
+        });
+      } else {
+        fs.exists(path.resolve(__dirname, lookup), function(exists) {
+          if(exists) {
+            fs.readFile(path.resolve(__dirname, lookup), function(err, data) {
+              if (err) {
+                console.log(err);
+                res.writeHead(500);
+                res.end();
+              } else {
+                res.writeHead(200, {"Content-Type": contentType });
+                res.end(data);
+              }
+            });
+          } else {
+            res.writeHead(404, headers);
+            res.end();
+          }
+        });
+      }
       break;
     case 'POST':
       console.log('posting');
