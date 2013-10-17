@@ -1,8 +1,13 @@
 var fs = require('fs');
 var request = require('request');
 var path = require('path');
+var mysql = require('mysql');
 module.exports.datadir = path.join(__dirname, "../../data/sites/"); // tests will need to override this.
 
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'webhistorian'
+});
 
 exports.readUrls = function(filePath, cb){
   if(fs.existsSync(filePath)){
@@ -19,11 +24,15 @@ exports.downloadUrls = function(urls){
   if (!Array.isArray(urls)) {
     throw new Error('downloadUrls: input is not an array');
   } else {
-    for (var i = 0; i < urls.length-1; i++) {
-      console.log('url: ', urls[i]);
-      console.log('module.exports.datadir: ', module.exports.datadir);
-      request('http://' + urls[i]).pipe(fs.createWriteStream(module.exports.datadir + urls[i]));
-    }
+    connection.connect();
+    connection.query('SELECT site FROM Sites', function(err, rows, fields) {
+      if (err)  console.log(err);
+      for (var i = 0; i < rows.length-1; i++) {
+        request('http://' + rows[i].site).pipe(fs.createWriteStream(module.exports.datadir + rows[i].site));
+      }
+    });
+    connection.end();
     return true;
   }
 };
+

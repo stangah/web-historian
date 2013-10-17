@@ -22,9 +22,6 @@ var collectData = function(request, callback){
 };
 
 module.exports.handleRequest = function (req, res) {
-  caching.cacheSites();
-  console.log(exports.datadir);
-
   var pathName = url.parse(req.url).pathname;
   var lookup = '';
 
@@ -54,6 +51,7 @@ module.exports.handleRequest = function (req, res) {
   // handle different method types
   switch(req.method) {
     case 'GET':
+      // NEED SQL HERE
       fs.exists(path.resolve(__dirname, lookup), function(exists) {
         if(exists) {
           fs.readFile(path.resolve(__dirname, lookup), function(err, data) {
@@ -77,6 +75,7 @@ module.exports.handleRequest = function (req, res) {
       collectData(req, function(data){
         var url = data.replace(/url=/,'');
         // append data to file
+        // NEED SQL HERE
         fs.appendFile(module.exports.datadir, url + '\n', function (err) {
         if (err) throw err;
           console.log('Data successfully appended to file!');
