@@ -1,1 +1,14 @@
+<<<<<<< HEAD
 
+=======
+www.google.com
+www.amazon.com
+www.yahoo.com
+www.ebay.com
+www.hackreactor.com
+www.zombo.com
+www.bing.com
+www.zappos.com
+www.facebook.com
+www.cnn.com
+>>>>>>> HEAD@{1}

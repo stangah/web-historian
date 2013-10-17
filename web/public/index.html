@@ -3,30 +3,45 @@
   <head>
     <title>Web Historian</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js">></script>
   </head>
   <body>
     <div class="container">
-      <h1>Web Historian</h1>
+      <h1>Web Historian<sub>by stangaH & cojo</sub></h1>
         <input class ="inputText" name="url" type="text" placeholder="Enter a site that you wish to track" />
-      <ul class="sites" id="siteList">
+      <ul class="sites">
       </ul>
     </div>
-
     <script>
-      $('.inputText').on('keypress', function(e) {
-        if(e.keyCode === 13){
-          $.ajax({
-            type: "POST",
-            url: '127.0.0.1:8080',
-            data: data,
-            success: success,
-            dataType: dataType
+      $(document).ready(function() {
+        $.get('http://127.0.0.1:8080/siteList',function(data){
+          var sites = JSON.parse(data);
+          $(sites).each(function(index, site){
+            if(site.length){
+              $('.sites').append('<li><a href="http://127.0.0.1:8080/'+site+'">'+site+'</a></li>');
+            }
           });
-        }
+        });
+
+        $('.inputText').on('keypress', function(e){
+          if(e.keyCode == 13){
+            $.ajax({
+              type: "POST",
+              url: 'http://127.0.0.1:8080',
+              data: {
+                url: $('.inputText').val()
+              },
+              success: function(){
+                console.log('sent POST request');
+              },
+              dataType: "json"
+            });
+            var site = $('.inputText').val();
+            $('.sites').append('<li><a href="http://127.0.0.1:8080/'+site+'">'+site+'</a></li>');
+            $('.inputText').val('');
+          }
+        });
       });
-
     </script>
-
   </body>
 </html>
