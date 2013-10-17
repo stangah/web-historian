@@ -3,6 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var caching = require('../workers/htmlfetcher');
 var htmlfetchers = require('../workers/lib/html-fetcher-helpers');
+
 module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
 
 var headers = {
