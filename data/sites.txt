@@ -6,3 +6,5 @@ www.hackreactor.com
 www.zombo.com
 www.bing.com
 www.zappos.com
+www.facebook.com
+www.cnn.com
