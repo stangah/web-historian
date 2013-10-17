@@ -1,3 +1,2 @@
 www.google.com
-www.example.com
-www.example.com
+www.amazon.com
