@@ -22,9 +22,6 @@ var collectData = function(request, callback){
 };
 
 module.exports.handleRequest = function (req, res) {
-  caching.cacheSites();
-  console.log(exports.datadir);
-
   var pathName = url.parse(req.url).pathname;
   var lookup = '';
 

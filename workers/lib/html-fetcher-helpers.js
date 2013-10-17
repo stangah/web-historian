@@ -20,8 +20,6 @@ exports.downloadUrls = function(urls){
     throw new Error('downloadUrls: input is not an array');
   } else {
     for (var i = 0; i < urls.length-1; i++) {
-      console.log('url: ', urls[i]);
-      console.log('module.exports.datadir: ', module.exports.datadir);
       request('http://' + urls[i]).pipe(fs.createWriteStream(module.exports.datadir + urls[i]));
     }
     return true;
