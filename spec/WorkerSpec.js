@@ -27,8 +27,8 @@ describe("html fetcher helpers", function(){
     });
   });
 
-  xit("should have a 'downloadUrls' function", function(){
-    var result = htmlFetcherHelpers.downloadUrls();
+  it("should have a 'downloadUrls' function", function(){
+    var result = htmlFetcherHelpers.downloadUrls(['www.yahoo.com']);
     expect(result).toBeTruthy();
   });
 });
