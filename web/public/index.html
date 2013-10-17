@@ -12,5 +12,24 @@
       <ul class="sites">
       </ul>
     </div>
+    <script>
+      $(document).ready(function() {
+        $('.inputText').on('keypress', function(e){
+          if(e.keyCode == 13){
+            $.ajax({
+              type: "POST",
+              url: 'http://127.0.0.1:8080',
+              data: {
+                url: $('.inputText').val()
+              },
+              success: function(){
+                console.log('sent POST request');
+              },
+              dataType: "json"
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
