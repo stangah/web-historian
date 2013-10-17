@@ -32,7 +32,7 @@ module.exports.handleRequest = function (req, res) {
     lookup = './public/index.html';
   } else if (pathName.slice(0,4) === "/css") {
     lookup = './public' + pathName;
-  } else {  // this will not allow us to get files referenced by index.html
+  } else {
     lookup = '../data/sites' + pathName;
   }
 
@@ -57,14 +57,13 @@ module.exports.handleRequest = function (req, res) {
       fs.exists(path.resolve(__dirname, lookup), function(exists) {
         if(exists) {
           fs.readFile(path.resolve(__dirname, lookup), function(err, data) {
-          if (err) {
-            console.log(err);
-            res.writeHead(500);
-            res.end();
-          } else {
-            res.writeHead(200, {"Content-Type": contentType });
-            res.end(data);
-          }
+            if (err) {
+              res.writeHead(500);
+              res.end();
+            } else {
+              res.writeHead(200, {"Content-Type": contentType });
+              res.end(data);
+            }
           });
         } else {
           res.writeHead(404, headers);

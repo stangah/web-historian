@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "http-get": "~0.5.10",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "cron": "~1.0.1"
   }
 }

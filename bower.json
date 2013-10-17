@@ -1,0 +1,17 @@
+{
+  "name": "web-historian",
+  "version": "0.0.1",
+  "homepage": "https://github.com/stangah/2013-09-web-historian",
+  "authors": [
+    "Hack Reactor Students <github@hackreactor.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}

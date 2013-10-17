@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" type="text/css" href="css/styles.css" />
-</head>
-<body>
-  <form method="POST">
-    <input type="input" name="url"></input>
-  </form>
-</body>
+<html lang="en">
+  <head>
+    <title>Web Historian</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Web Historian</h1>
+        <input class ="inputText" name="url" type="text" placeholder="Enter a site that you wish to track" />
+      <ul class="sites" id="siteList">
+      </ul>
+    </div>
+
+    <script>
+      $('.inputText').on('keypress', function(e) {
+        if(e.keyCode === 13){
+          $.ajax({
+            type: "POST",
+            url: '127.0.0.1:8080',
+            data: data,
+            success: success,
+            dataType: dataType
+          });
+        }
+      });
+
+    </script>
+
+  </body>
 </html>
