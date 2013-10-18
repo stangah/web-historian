@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var url = require('url');
+var mysql = require('mysql');
 var caching = require('../workers/htmlfetcher');
 var htmlfetchers = require('../workers/lib/html-fetcher-helpers');
 
@@ -12,6 +13,12 @@ var headers = {
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
 };
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'webhistorian',
+  database : 'WebHistorian'
+});
 
 var collectData = function(request, callback){
   var data = "";
@@ -81,10 +88,16 @@ module.exports.handleRequest = function (req, res) {
         var url = data.replace(/url=/,'');
         // append data to file
         // NEED SQL HERE
-        fs.appendFile(module.exports.datadir, url + '\n', function (err) {
-        if (err) throw err;
-          console.log('Data successfully appended to file!');
-          htmlfetchers.downloadUrls([url,'']);
+        connection.connect();
+        // connection.query('SELECT site FROM Sites', function(err, rows, fields) {
+        //   if (err)  console.log(err);
+        //   for(var i = 0; i < rows.length; i++){
+        //     sites.push(rows[i].site);
+        //   }
+        connection.query("INSERT INTO Sites (site) VALUES (?)", [url], function(err, rows, fields) {
+          if (err) console.log(err);
+          htmlfetchers.downloadUrls([url]);
+          connection.end();
         });
       });
       res.end();

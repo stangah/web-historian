@@ -11,12 +11,16 @@ var connection = mysql.createConnection({
 });
 
 exports.readUrls = function(filePath, cb){
-  if(fs.existsSync(filePath)){
-    cb( ('' + fs.readFileSync(filePath)).split('\n') );
-  }else{
-    // error
-    console.log('readUrls: File not found.');
-  }
+  var sites = [];
+  connection.connect();
+  connection.query('SELECT site FROM Sites', function(err, rows, fields) {
+    if (err)  console.log(err);
+    for(var i = 0; i < rows.length; i++){
+      sites.push(rows[i].site);
+    }
+    connection.end();
+    cb(sites);
+  });
 };
 
 exports.downloadUrls = function(urls){
@@ -25,15 +29,9 @@ exports.downloadUrls = function(urls){
   if (!Array.isArray(urls)) {
     throw new Error('downloadUrls: input is not an array');
   } else {
-    connection.connect();
-    connection.query('SELECT site FROM Sites', function(err, rows, fields) {
-      if (err)  console.log(err);
-      console.log('db rows: ', rows[0].site);
-      for (var i = 0; i < rows.length; i++) {
-        request('http://' + rows[i].site).pipe(fs.createWriteStream(module.exports.datadir + rows[i].site));
-      }
-      connection.end();
-    });
+    for (var i = 0; i < urls.length; i++) {
+      request('http://' + urls[i]).pipe(fs.createWriteStream(module.exports.datadir + urls[i]));
+    }
     return true;
   }
 };
