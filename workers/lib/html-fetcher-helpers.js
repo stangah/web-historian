@@ -10,15 +10,18 @@ var connection = mysql.createConnection({
   database : 'WebHistorian'
 });
 
-exports.readUrls = function(filePath, cb){
+exports.readUrls = function(cb){
   var sites = [];
-  connection.connect();
+  var sitesObj = {};
   connection.query('SELECT site FROM Sites', function(err, rows, fields) {
     if (err)  console.log(err);
     for(var i = 0; i < rows.length; i++){
-      sites.push(rows[i].site);
+      sitesObj[rows[i].site] = true;
     }
-    connection.end();
+    for (var key in sitesObj) {
+      sites.push(key);
+    }
+    console.log(sites);
     cb(sites);
   });
 };
@@ -29,8 +32,12 @@ exports.downloadUrls = function(urls){
   if (!Array.isArray(urls)) {
     throw new Error('downloadUrls: input is not an array');
   } else {
+    var timeStamp = Date.now().toString();
     for (var i = 0; i < urls.length; i++) {
-      request('http://' + urls[i]).pipe(fs.createWriteStream(module.exports.datadir + urls[i]));
+      request('http://' + urls[i]).pipe(fs.createWriteStream(module.exports.datadir + urls[i] + timeStamp));
+      connection.query("INSERT INTO Sites (site, timestamp) VALUES (?, ?)", [urls[i], timeStamp], function(err, rows, fields) {
+        if (err) { console.log(err); }
+      });
     }
     return true;
   }

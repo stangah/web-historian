@@ -62,7 +62,16 @@ module.exports.handleRequest = function (req, res) {
   // handle different method types
   switch(req.method) {
     case 'GET':
-      // NEED SQL HERE
+      if (lookup === '/siteList') {
+        res.writeHead(200);
+        var urlList;
+        htmlfetchers.readUrls(function(urls) {
+          urlList = urls;
+        });
+        res.end(urlList);
+        return;
+      }
+
       fs.exists(path.resolve(__dirname, lookup), function(exists) {
         if(exists) {
           fs.readFile(path.resolve(__dirname, lookup), function(err, data) {
@@ -81,23 +90,15 @@ module.exports.handleRequest = function (req, res) {
       });
       break;
     case 'POST':
-      console.log('posting');
-      // the problem is that we are not writing to the test sites.txt
       res.writeHead(302, headers);
       collectData(req, function(data){
         var url = data.replace(/url=/,'');
         // append data to file
-        // NEED SQL HERE
-        connection.connect();
-        // connection.query('SELECT site FROM Sites', function(err, rows, fields) {
-        //   if (err)  console.log(err);
-        //   for(var i = 0; i < rows.length; i++){
-        //     sites.push(rows[i].site);
-        //   }
+        // connection.connect();
         connection.query("INSERT INTO Sites (site) VALUES (?)", [url], function(err, rows, fields) {
           if (err) console.log(err);
           htmlfetchers.downloadUrls([url]);
-          connection.end();
+          // connection.end();
         });
       });
       res.end();
